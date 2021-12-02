@@ -3,7 +3,7 @@ import { useRef } from "react";
 import useAuth from "../../hooks/authHook";
 import { useHistory } from "react-router";
 
-const Login = () => {
+const Login = ({setPosition}) => {
   const [setToken] = useAuth(true);
 
   const history = useHistory();
@@ -25,11 +25,13 @@ const Login = () => {
       body: JSON.stringify(loginData),
     });
     const user = await DATA.json();
-    if (user.token) {
+    if (user.token && user.position) {
       setToken(user.token);
+      setPosition(user.position)
       history.push("/");
     } else {
       setToken(false);
+      setPosition('')
     }
   };
 

@@ -8,21 +8,33 @@ import Login from './pages/login/Login';
 import Register from './pages/register/Register';
 import Clinics from './pages/clinics/Clinics';
 import Error from './pages/Error/error';
-
+import Quee from './pages/quee/Quee';
+import Users from './pages/users/users';
+import Orders from './pages/orders/order';
 
 import Public from './routes/Public';
 import Private from './routes/Private';
+import useAuth from './hooks/authHook';
 
 function App() {
-  const [clinics, setClinics] = useState({});
+  const [data, setData] = useState({});
+  const [position,setPosition] = useState()
+  const [quees,setQuees] = useState({})
+  const [token] = useAuth()
   useEffect(() => {
     (async () => {
-      const DATA = await fetch("http://localhost:2000/clinics");
+      const DATA = await fetch("http://localhost:2000/",{
+        method:"GET",
+        headers: {
+          "Content-Type": "Application/json",
+          token,
+        },
+      });
       const data = await DATA.json();
 
-      if (data.clinics && data.categories) {
-        setClinics(data)
-        // console.log(data,'if');
+      if (data.clinics && data.categories && data.quees) {
+        setData(data)
+        console.log(data);
       }
     })();
 
@@ -32,16 +44,29 @@ function App() {
     <div className="App">
           <Switch>
                     <Public path='/'  exact >
-                        <Home  />
+                        <Home position={position} />
                     </Public>
 
-                    <Public path='/login' component={Login} />
+                    <Public path='/login' >
+                      <Login setPosition={setPosition} />
+                    </Public>
 
                     <Public path='/clinics'>
-                        <Clinics clinics={clinics}  />
+                        <Clinics data={data}  />
                     </Public>  
 
-                    <Public path='/register' component={Register} />
+                    <Public path='/register'>
+                        <Register setPosition={setPosition}  />
+                    </Public>
+                    <Private path='/quee' >
+                        <Quee clinics={data.clinics} categories={data.categories} />
+                    </Private>
+                    <Private path='/admin/users' >
+                        <Users  />
+                    </Private>
+                    <Private path="/admin/orders" >
+                        <Orders quees={data.quees} />
+                    </Private>
                     <Route path="*" component={Error} />    
             </Switch>
     </div>

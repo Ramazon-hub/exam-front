@@ -1,7 +1,8 @@
 import './Clinic.css'
 import Clinica from '../../components/clinica/clinica';
-const Clinics = ({ clinics }) =>{
-    console.log(clinics);
+const Clinics = ({ data }) =>{
+    console.log(data);
+    
     return(
     
         <div className="wrapper">
@@ -10,10 +11,10 @@ const Clinics = ({ clinics }) =>{
             <div className="posts-wrapper">
                 <div className="posts-wrapper-top">
                     <h1>Clinics</h1> 
-                   {  clinics.clinics && clinics.clinics.length && <ul>
+                   {  data.clinics && data.clinics.length && <ul>
                             {
-                            clinics.clinics.map((clinica,i) => (
-                             <Clinica key={i} clinica={clinica} clinics={clinics}  />
+                            data.clinics.map((clinica,i) => (
+                             <Clinica key={i} clinica={clinica} data={data}  />
                                 )  )
                             }
                             </ul>  }                  

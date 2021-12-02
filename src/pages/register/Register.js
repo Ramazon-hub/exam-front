@@ -4,7 +4,7 @@ import { useRef } from "react";
 // import { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import useAuth from '../../hooks/authHook';
-const Register = () =>{
+const Register = ({setPosition}) =>{
 
 //   const [input,setInput] = useState("")
 const [setToken] = useAuth(true);
@@ -25,7 +25,6 @@ const [setToken] = useAuth(true);
         uName: username.current.value,
         password: password.current.value,
     };
-    console.log(signUpdata);
     const DATA = await fetch(`http://localhost:2000/register`,{
         method:"POST",
         headers: {
@@ -37,11 +36,14 @@ const [setToken] = useAuth(true);
     const user = await DATA.json();
     if (user.token) {
         setToken(user.token);
+        setPosition(user.position)
         history.push("/");
       } else {
         setToken(false);
+        setPosition('')
+
       }
-    console.log(user);
+   
   }
 
 
